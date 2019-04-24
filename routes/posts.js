@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/post');
+const {Post, validate} = require('../models/post');
 
 router.get('/', async (req, res) => {
   const posts = await Post.find();
@@ -9,6 +9,8 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const {error} = validate(req.body);
+  if(error) return res.status(400).send(error.details[0].message);
   
   const post = new Post({
     title: req.body.title,
@@ -27,6 +29,9 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+  const {errors} = validate(req.body);
+  if(errors) return res.status(400).send(errors.details[0].message);
+
   const post = await Post.findOneAndUpdate(req.params.id, {
     title: req.body.title,
     content: req.body.content
@@ -39,7 +44,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const post = await Post.findOneAndDelete(req.params.id);
   if(!post) return res.status(404).send('Post with the given ID was not found!');
-  
+
   res.send(post);
 });
 
