@@ -9,7 +9,9 @@ const posts = require('./routes/posts');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const mongoose = require('mongoose');
-const {logger} = require('./startup/logging');
+const {logger, handleExeptions} = require('./startup/logging');
+
+handleExeptions();
 
 app.use(express.json());
 app.use('/api/posts', posts);

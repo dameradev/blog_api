@@ -11,13 +11,16 @@ const logger = winston.createLogger({
   ]
 }); 
 
-winston.exceptions.handle(
-  new winston.transports.File({filename: 'uncaughtExeptions.log'}),
-  new winston.transports.MongoDB({db: 'mongodb://localhost/blog', collection: 'log'})
-);
+const handleExeptions = function(){
+  winston.exceptions.handle(
+    new winston.transports.File({filename: 'uncaughtExeptions.log'}),
+    new winston.transports.MongoDB({db: 'mongodb://localhost/blog', collection: 'log'})
+  );
 
-process.on('unhandledRejection', (ex) => {
-  throw ex;
-});
+  process.on('unhandledRejection', (ex) => {
+    throw ex;
+  });
+}
 
 exports.logger = logger;
+exports.handleExeptions = handleExeptions;
