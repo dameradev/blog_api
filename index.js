@@ -1,3 +1,4 @@
+const config = require('config');
 const express = require('express');
 const app = express();
 const posts = require('./routes/posts');
@@ -10,6 +11,12 @@ app.use('/api/users', users);
 
 mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true })
   .then(() => console.log('Connected to MongoDB...'));
+
+ 
+
+if(!config.get('jwtPrivateKey')) 
+  throw new Error('FATAL ERROR: jwtPrivateKey is not defined');
+
 
 
 const port = process.env.PORT || 3000;
