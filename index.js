@@ -1,3 +1,7 @@
+const error = require('./middleware/error');
+require('express-async-errors');
+const winston = require('winston');
+require('winston-mongodb')
 const config = require('config');
 const express = require('express');
 const app = express();
@@ -5,15 +9,22 @@ const posts = require('./routes/posts');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const mongoose = require('mongoose');
+const {logger} = require('./startup/logging');
 
 app.use(express.json());
 app.use('/api/posts', posts);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use(error);
+
+
+
 
 mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true })
-  .then(() => console.log('Connected to MongoDB...'));
-
+  .then(() => {
+    logger.log('info', 'Connected to mongoose');
+  });
+  
  
 
 if(!config.get('jwtPrivateKey')) 
@@ -22,4 +33,4 @@ if(!config.get('jwtPrivateKey'))
 
 
 const port = process.env.PORT || 3000;
-app.listen(3000, () => console.log(`Listening on port ${port}...`))
+app.listen(3000, () => logger.log('info', `Listening on port ${port}...`))
