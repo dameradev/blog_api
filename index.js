@@ -8,15 +8,12 @@ const {logger, handleExeptions} = require('./startup/logging');
 
 handleExeptions();
 require('./startup/routes')(app);
+require('./startup/db')();
 
 
 
 
 
-mongoose.connect('mongodb://localhost/blog', { useNewUrlParser: true })
-  .then(() => {
-    logger.log('info', 'Connected to mongoose');
-  });
   
  
 
