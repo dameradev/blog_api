@@ -1,9 +1,9 @@
 const express = require('express');
-const error = require('./middleware/error');
-const posts = require('./routes/posts');
-const users = require('./routes/users');
-const auth = require('./routes/auth');
-const topics = require('./routes/topics');
+const error = require('../middleware/error');
+const posts = require('../routes/posts');
+const users = require('../routes/users');
+const auth = require('../routes/auth');
+const topics = require('../routes/topics');
 
 module.exports = function(app){
   app.use(express.json());

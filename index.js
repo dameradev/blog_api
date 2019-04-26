@@ -1,24 +1,12 @@
-require('express-async-errors');
-const winston = require('winston');
-require('winston-mongodb')
-const config = require('config');
 
-const mongoose = require('mongoose');
+const express = require('express');
+const app = express();
 const {logger, handleExeptions} = require('./startup/logging');
 
 handleExeptions();
 require('./startup/routes')(app);
 require('./startup/db')();
-
-
-
-
-
-  
- 
-
-if(!config.get('jwtPrivateKey')) 
-  throw new Error('FATAL ERROR: jwtPrivateKey is not defined');
+require('./startup/config')();
 
 
 
