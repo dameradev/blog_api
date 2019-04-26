@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Post, validate} = require('../models/post');
+const {Topic} = require('../models/topic');
 
 router.get('/', async (req, res) => {
   const posts = await Post.find();
@@ -12,9 +13,16 @@ router.post('/', async (req, res) => {
   const {error} = validate(req.body);
   if(error) return res.status(400).send(error.details[0].message);
   
+  const topic = await Topic.findById(req.body.topicId);
+  if(!topic) return res.status(400).send('Topic id doesn\' exists.')
+
   const post = new Post({
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    topic: {
+      _id: topic._id,
+      name: topic.name
+    }
   });
 
   await post.save();

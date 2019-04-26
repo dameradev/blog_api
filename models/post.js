@@ -1,6 +1,7 @@
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
-
+const {topicSchema} = require('./topic');
 
 const Post = mongoose.model('Post', new mongoose.Schema({
   title: {
@@ -14,6 +15,10 @@ const Post = mongoose.model('Post', new mongoose.Schema({
     required: true,
     minlength: 10,
     maxlength: 1024
+  },
+  topic: {
+    type: topicSchema,
+    required: true
   }
 }));
 
@@ -21,7 +26,8 @@ const Post = mongoose.model('Post', new mongoose.Schema({
 function validatePost(post) {
   const schema = {
     title: Joi.string().min(10).max(255).required(),
-    content: Joi.string().min(10).required()
+    content: Joi.string().min(10).required(),
+    topicId: Joi.objectId().required()
   }
 
   return Joi.validate(post, schema);

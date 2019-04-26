@@ -21,4 +21,5 @@ const validateTopic = function(topic) {
 }
 
 exports.Topic = Topic;
+exports.topicSchema = topicSchema;
 exports.validate = validateTopic;
