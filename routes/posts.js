@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const {Post, validate} = require('../models/post');
 const {Topic} = require('../models/topic');
 
@@ -15,14 +16,12 @@ router.post('/', async (req, res) => {
   
   const topic = await Topic.findById(req.body.topicId);
   if(!topic) return res.status(400).send('Topic id doesn\' exists.')
+  
 
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
-    topic: {
-      _id: topic._id,
-      name: topic.name
-    }
+    topicId: req.body.topicId
   });
 
   await post.save();
@@ -30,7 +29,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('topicId');
   if(!post) return res.status(404).send('Post with the given ID was not found!');
 
   res.send(post);

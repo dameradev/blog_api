@@ -16,8 +16,9 @@ const Post = mongoose.model('Post', new mongoose.Schema({
     minlength: 10,
     maxlength: 1024
   },
-  topic: {
-    type: topicSchema,
+  topicId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Topic',
     required: true
   }
 }));
